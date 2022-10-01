@@ -5,10 +5,16 @@ pipeline{
             stage('Test'){
                 steps{
                     dir("reqresin"){
-                      sh "gradlew clean test"
+                      sh "sh gradlew clean test"
                     }
 
                 }
+
             }
         }
+        post {
+        always {
+            junit 'reqresin/target/site/serenity/*.xml'
+        }
+    }
 }

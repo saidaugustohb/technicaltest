@@ -63,7 +63,20 @@ test {
     maxParallelForks = Runtime.runtime.availableProcessors()
     systemProperties System.getProperties()
 }
-
+task runAParallelSuite(type: Test) {
+    def forks =4
+    exclude ('**/Library.java')
+    println "The Maximum parallel is $forks on project"
+    // uncomment maxParallelForks if you prefer to use the Gradle process forker
+    // which also requires a complete change of how the suite class works
+    maxParallelForks = forks
+    include '**/**Test.class'
+    // testReportDir = file("${reporting.baseDir}/AParallelSuite")
+    // testResultsDir = file("${buildDir}/test-results/AParallelSuite")
+    // show standard out and standard error of the test JVM(s) on the console
+    testLogging.showStandardStreams = true
+}
 gradle.startParameter.continueOnFailure = true
 
 test.finalizedBy(aggregate)
+runAParallelSuite.finalizedBy(aggregate)
