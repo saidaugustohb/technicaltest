@@ -1,0 +1,13 @@
+pipeline{
+    agent{label 'master'}
+        stages{
+            stage('Test'){
+                steps{
+                    dir("reqresin"){
+                      sh "gradlew clean test"
+                    }
+
+                }
+            }
+        }
+}
