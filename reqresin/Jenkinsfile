@@ -1,5 +1,6 @@
+
 pipeline{
-    agent{label 'principal'}
+    agent{label 'Principal'}
         stages{
             stage('Test'){
                 steps{
