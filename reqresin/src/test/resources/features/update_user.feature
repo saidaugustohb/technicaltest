@@ -15,3 +15,14 @@ Característica: Yo como cliente deseo un api que me permita realizar la actuali
       | id  | name     | job               |
       | 220 | John Doe | Automation Senior |
       | 2   | John Doe | Automation Senior |
+
+
+
+  @UpdateUser
+  Escenario: : Validar la actualizacion de un usuario no existente
+    Dado que el 'usuario' realiza la conexion con el API de reqresin
+    Cuando el actualiza el usuario con el id 500 direccion '/users/'
+      | name   | job   |
+      | <name> | <job> |
+    Entonces el deberia obtener un estado 404 de solicitud exitosa
+

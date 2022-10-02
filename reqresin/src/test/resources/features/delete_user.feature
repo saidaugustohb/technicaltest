@@ -14,4 +14,12 @@ Característica: Yo como cliente deseo un api que me permita eliminar usuarios d
     | 8|
     |23|
 
+  @DeleteUser
+  Escenario: Validar la eliminacion de un usuario existente
+    Dado que el 'cliente' realiza la conexion con el API de reqresin
+    Cuando el elimina un usuario con el id 1 en la direccion '/users/'
+    Entonces el deberia obtener un estado 204 sin contenido
+    Cuando el consulta el usuario con id 1 en la direccion '/users/'
+    Entonces al consultar el usuario este no debe existir retornando un estado 404
+
 
