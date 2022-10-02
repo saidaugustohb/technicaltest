@@ -4,6 +4,7 @@ import com.appgate.reqresin.models.User;
 import com.appgate.reqresin.models.UserResponse;
 import com.appgate.reqresin.models.enums.ConnectionInformation;
 import com.appgate.reqresin.questions.TheStatus;
+import com.appgate.reqresin.tasks.ConsultUser;
 import com.appgate.reqresin.tasks.CreateUser;
 import io.cucumber.java.es.Cuando;
 import io.cucumber.java.es.Dado;
@@ -33,6 +34,11 @@ public class CreateUserStepDefinitions {
     @Entonces("el deberia obtener un estado {int} de creacion")
     public void elDeberiaObtenerUnEstadoDeCreacion(Integer status) {
         theActorInTheSpotlight().should(seeThat(TheStatus.ofResponse(), is(status)));
+    }
+
+    @Cuando("se consulta el id del usuario creado en la direccion {string}")
+    public void seConsultaElIdDelUsuarioCreado(String endpoint) {
+        theActorInTheSpotlight().attemptsTo(ConsultUser.by(UserResponse.getUserResponse().getId()).into(endpoint));
     }
 
     @Entonces("debera visualizar la informacion del usuario creado")
