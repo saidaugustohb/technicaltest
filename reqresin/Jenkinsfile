@@ -14,8 +14,8 @@ pipeline{
         }
         post {
         always {
-            junit 'reqresin/target/site/serenity/*.xml'
-             sh('curl "https://api.telegram.org/bot5615205309:AAGqaobL8r1RD2BvZ3vM0Qr3gEIIKcTFY-U/sendMessage?chat_id=-1001716681598&text=Finish Test Pipeline with result ${currentBuild.currentResult}"') 
+                sh('curl "https://api.telegram.org/bot5615205309:AAGqaobL8r1RD2BvZ3vM0Qr3gEIIKcTFY-U/sendMessage?chat_id=-1001716681598&text=Finish Test Pipeline"') 
+                junit 'reqresin/target/site/serenity/*.xml'
         }
     }
 }
