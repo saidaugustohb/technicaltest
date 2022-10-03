@@ -1,0 +1,82 @@
+defaultTasks 'clean', 'test', 'aggregate'
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.10")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = "UTF-8"
+
+ext {
+    slf4jVersion = '1.7.7'
+    serenityCoreVersion = '2.3.10'
+    serenityCucumberVersion = '2.3.10'
+    junitVersion = '4.13.1'
+    assertJVersion = '3.8.0'
+    logbackVersion = '1.2.3'
+}
+
+dependencies {
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0'
+    implementation "net.serenity-bdd:serenity-core:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-cucumber6:${serenityCucumberVersion}",
+            "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-screenplay-webdriver:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-ensure:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-screenplay-rest:${serenityCoreVersion}",
+            "junit:junit:${junitVersion}",
+            "org.assertj:assertj-core:${assertJVersion}",
+            "org.postgresql:postgresql:42.2.19.jre7",
+            "com.sun.mail:javax.mail:1.6.2"
+    implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.2.1.jre8'
+    implementation 'org.springframework:spring-jdbc:5.1.9.RELEASE'
+}
+
+test {
+    try{
+        System.setProperty("ENVURL", ENVURL)
+        System.setProperty("cucumber.filter.tags", TAGS)
+    } catch (e){
+
+    }
+    testLogging.showStandardStreams = true
+    maxParallelForks = Runtime.runtime.availableProcessors()
+    systemProperties System.getProperties()
+}
+task runAParallelSuite(type: Test) {
+    def forks =4
+    exclude ('**/Library.java')
+    println "The Maximum parallel is $forks on project"
+    // uncomment maxParallelForks if you prefer to use the Gradle process forker
+    // which also requires a complete change of how the suite class works
+    maxParallelForks = forks
+    include '**/**Test.class'
+    // testReportDir = file("${reporting.baseDir}/AParallelSuite")
+    // testResultsDir = file("${buildDir}/test-results/AParallelSuite")
+    // show standard out and standard error of the test JVM(s) on the console
+    testLogging.showStandardStreams = true
+}
+gradle.startParameter.continueOnFailure = true
+
+test.finalizedBy(aggregate)
+runAParallelSuite.finalizedBy(aggregate)
