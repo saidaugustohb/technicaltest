@@ -1,4 +1,4 @@
-package com.appgate.application.dynamo.repo;
+package com.appgate.application.interfaces;
 
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.*;
